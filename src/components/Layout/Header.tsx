@@ -5,6 +5,7 @@ import Link from 'next/link';
 export function Header() {
   const [isMobile, setIsMobile] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoFullscreen, setLogoFullscreen] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -31,16 +32,23 @@ export function Header() {
         gap: isMobile ? '12px' : '24px'
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: isMobile ? '8px' : '12px' }}>
-          <div style={{
-            position: 'relative',
-            width: isMobile ? '50px' : '60px',
-            height: isMobile ? '50px' : '60px',
-            borderRadius: '8px',
-            overflow: 'hidden',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-            background: '#ffffff',
-            flexShrink: 0
-          }}>
+          <div 
+            onClick={(e) => {
+              e.preventDefault();
+              setLogoFullscreen(true);
+            }}
+            style={{
+              position: 'relative',
+              width: isMobile ? '50px' : '60px',
+              height: isMobile ? '50px' : '60px',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              background: '#ffffff',
+              flexShrink: 0,
+              cursor: 'pointer'
+            }}
+          >
             <img
               src="/logo.jpeg"
               alt="DoorWin Craft Logo"
@@ -185,6 +193,66 @@ export function Header() {
         </nav>
         )}
       </div>
+      
+      {/* Fullscreen Logo Modal */}
+      {logoFullscreen && (
+        <div
+          onClick={() => setLogoFullscreen(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+            cursor: 'pointer',
+            padding: '20px'
+          }}
+        >
+          <img
+            src="/logo.jpeg"
+            alt="DoorWin Craft Logo - Full Size"
+            style={{
+              maxWidth: '90%',
+              maxHeight: '90%',
+              objectFit: 'contain',
+              borderRadius: '8px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.5)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setLogoFullscreen(false);
+            }}
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              background: 'rgba(255,255,255,0.2)',
+              border: '2px solid rgba(255,255,255,0.5)',
+              borderRadius: '50%',
+              width: '40px',
+              height: '40px',
+              color: '#ffffff',
+              fontSize: '24px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0
+            }}
+            aria-label="Close fullscreen"
+          >
+            ✕
+          </button>
+        </div>
+      )}
     </header>
   );
 }
