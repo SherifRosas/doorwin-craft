@@ -82,6 +82,22 @@ export interface DesignConfig {
 }
 
 export default function DesignerPage() {
+  const historyManager = useRef(new HistoryManager<DesignConfig>());
+  const canvasActionsRef = useRef<{ center?: () => void; fit?: () => void } | null>(null);
+  const { toasts, showToast, removeToast } = useToast();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check if mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
   const [design, setDesign] = useState<DesignConfig>({
     type: 'window',
     template: 'single',
@@ -150,17 +166,13 @@ export default function DesignerPage() {
     return windowDefaults[template] || { width: 1200, height: 1500 };
   };
 
-  const historyManager = useRef(new HistoryManager<DesignConfig>());
-  const canvasActionsRef = useRef<{ center?: () => void; fit?: () => void } | null>(null);
-  const { toasts, showToast, removeToast } = useToast();
-
   // Initialize history
   useEffect(() => {
     historyManager.current.push(design);
     // Track designer opened
     FunnelEvents.designer_opened();
     FunnelEvents.design_started(design.template, design.type);
-  }, []);
+  }, [design]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -276,8 +288,50 @@ export default function DesignerPage() {
           </button>
         </div>
       </div>
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        <div style={{ width: '300px', borderRight: '1px solid #ddd', overflowY: 'auto', padding: '16px' }}>
+      <div style={{ 
+        display: 'flex', 
+        flex: 1, 
+        overflow: 'hidden',
+        flexDirection: isMobile ? 'column' : 'row'
+      }}>
+        {/* Mobile menu button */}
+        {isMobile && (
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            style={{
+              position: 'fixed',
+              top: '108px',
+              left: '10px',
+              zIndex: 1001,
+              padding: '10px',
+              backgroundColor: '#1e3a5f',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '18px'
+            }}
+          >
+            ☰
+          </button>
+        )}
+        
+        {/* Sidebar - hidden on mobile unless open */}
+        <div style={{ 
+          width: isMobile ? '100%' : '300px',
+          maxWidth: isMobile ? '100%' : '300px',
+          borderRight: isMobile ? 'none' : '1px solid #ddd',
+          overflowY: 'auto',
+          padding: isMobile ? '12px' : '16px',
+          display: isMobile && !sidebarOpen ? 'none' : 'block',
+          position: isMobile ? 'fixed' : 'relative',
+          top: isMobile ? '92px' : 'auto',
+          left: isMobile ? 0 : 'auto',
+          height: isMobile ? 'calc(100vh - 92px)' : 'auto',
+          backgroundColor: isMobile ? '#fff' : 'transparent',
+          zIndex: isMobile ? 1000 : 1,
+          boxShadow: isMobile ? '2px 0 8px rgba(0,0,0,0.1)' : 'none'
+        }}>
           <QuickGuide />
           <SizePresets 
             design={design} 
@@ -317,8 +371,19 @@ export default function DesignerPage() {
             onSaveError={(error) => showToast(error, 'error')}
           />
         </div>
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ flex: 1, position: 'relative', borderBottom: '1px solid #ddd' }}>
+        <div style={{ 
+          flex: 1, 
+          display: 'flex', 
+          flexDirection: 'column',
+          width: isMobile && sidebarOpen ? 0 : '100%',
+          overflow: 'hidden'
+        }}>
+          <div style={{ 
+            flex: 1, 
+            position: 'relative', 
+            borderBottom: '1px solid #ddd',
+            minHeight: isMobile ? '300px' : 'auto'
+          }}>
             <InteractiveCanvas2D 
               design={design} 
               onDesignChange={updateDesign}
@@ -328,7 +393,7 @@ export default function DesignerPage() {
             />
           </div>
           <div style={{ 
-            height: '300px', 
+            height: isMobile ? '250px' : '300px', 
             background: 'linear-gradient(to bottom, #f0f0f0 0%, #e8e8e8 100%)',
             borderTop: '1px solid #ddd',
             position: 'relative',
