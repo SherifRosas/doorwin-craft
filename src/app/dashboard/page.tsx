@@ -8,9 +8,15 @@ interface User {
   orgId: string;
 }
 
+interface Billing {
+  status?: string;
+  trialEndsAt?: string;
+  currentPeriodEnd?: string;
+}
+
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [billing, setBilling] = useState(null);
+  const [billing, setBilling] = useState<Billing | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

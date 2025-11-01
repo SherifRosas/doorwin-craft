@@ -64,7 +64,6 @@ export function SizePresets({ design, onApply }: { design: DesignConfig; onApply
                   e.currentTarget.style.background = 'white';
                 }
               }}
-              title={preset.description}
             >
               <div style={{ fontWeight: 'bold', fontSize: '13px', marginBottom: '2px' }}>{preset.name}</div>
               <div style={{ fontSize: '11px', color: '#666' }}>

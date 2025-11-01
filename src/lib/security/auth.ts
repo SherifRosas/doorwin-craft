@@ -33,12 +33,15 @@ export class SecurityManager {
   }
 
   static async checkLoginRateLimit(): Promise<boolean> {
-    try {
-      await this.loginLimiter.removeTokens(1);
-      return true;
-    } catch {
-      return false;
-    }
+    return new Promise((resolve) => {
+      this.loginLimiter.removeTokens(1, (err, remainingTokens) => {
+        if (err) {
+          resolve(false);
+        } else {
+          resolve(remainingTokens !== null && remainingTokens >= 0);
+        }
+      });
+    });
   }
 }
 

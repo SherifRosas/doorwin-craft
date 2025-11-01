@@ -183,10 +183,12 @@ export default function DesignerPage() {
   const updateDesign = (updates: Partial<DesignConfig>) => {
     // Apply smart defaults if template or type changes
     if (updates.template && updates.template !== design.template) {
-      const smartDefaults = getSmartDefaults(updates.template, updates.type || design.type);
+      const template = updates.template;
+      const type = updates.type || design.type;
+      const smartDefaults = getSmartDefaults(template, type);
       updates = { ...smartDefaults, ...updates };
-      FunnelEvents.design_template_changed(updates.template, updates.type || design.type);
-      FunnelEvents.template_selected(updates.template, updates.type || design.type);
+      FunnelEvents.design_template_changed(template, type);
+      FunnelEvents.template_selected(template, type);
     }
     if (updates.type && updates.type !== design.type) {
       const smartDefaults = getSmartDefaults(updates.template || design.template, updates.type);

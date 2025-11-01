@@ -22,13 +22,24 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Log to Sentry
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
-      Sentry.captureException(error, { contexts: { react: errorInfo } });
-    }
-    console.error('Error caught by boundary:', error, errorInfo);
-  }
+      componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+        // Log to Sentry
+        if (typeof window !== 'undefined' && (window as any).Sentry) {
+          try {
+            Sentry.captureException(error, {
+              contexts: {
+                react: {
+                  componentStack: errorInfo.componentStack || '',
+                },
+              },
+            });
+          } catch (e) {
+            // Fallback if Sentry format is incorrect
+            Sentry.captureException(error);
+          }
+        }
+        console.error('Error caught by boundary:', error, errorInfo);
+      }
 
   render() {
     if (this.state.hasError) {
