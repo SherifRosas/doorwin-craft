@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  orgs Org[]
+}
+
+model Org {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  subscription Subscription?
+  payments   Payment[]
+  customers  Customer[]
+  orders     Order[]
+  designs    Design[]
+}
+
+model Subscription {
+  id                String            @id @default(cuid())
+  status            SubscriptionStatus
+  trialEndsAt       DateTime?
+  currentPeriodEnd  DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  // Relations
+  orgId String @unique
+  org   Org    @relation(fields: [orgId], references: [id])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  amount        Int           // Amount in cents
+  currency      String
+  status        PaymentStatus
+  gateway       String        // 'stripe', 'tap', 'moyasar'
+  gatewayId     String?       // External gateway ID
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  orgId String
+  org   Org    @relation(fields: [orgId], references: [id])
+}
+
+enum SubscriptionStatus {
+  TRIAL_ACTIVE
+  SUBSCRIBED_ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  CANCELED
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  orgId String
+  org   Org    @relation(fields: [orgId], references: [id])
+  orders Order[]
+}
+
+model Design {
+  id          String   @id @default(cuid())
+  name        String?
+  config      String   // JSON string of DesignConfig
+  price       Int?     // Calculated price in cents
+  thumbnail   String?  // Base64 or URL to thumbnail
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  orgId String
+  org   Org    @relation(fields: [orgId], references: [id])
+  orders OrderItem[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique // Human-readable order number
+  status      OrderStatus @default(DRAFT)
+  subtotal    Int         // Amount in cents before VAT
+  vat         Int         // VAT amount in cents (KSA 15%)
+  total       Int         // Total amount in cents
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  orgId     String
+  org       Org       @relation(fields: [orgId], references: [id])
+  customerId String
+  customer  Customer  @relation(fields: [customerId], references: [id])
+  items     OrderItem[]
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  quantity Int    @default(1)
+  price    Int    // Unit price in cents
+  notes    String?
+
+  // Relations
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  designId String?
+  design   Design? @relation(fields: [designId], references: [id])
+}
+
+enum OrderStatus {
+  DRAFT
+  QUOTE_SENT
+  QUOTE_ACCEPTED
+  IN_PRODUCTION
+  READY_FOR_INSTALLATION
+  INSTALLED
+  COMPLETED
+  CANCELLED
+}
+
