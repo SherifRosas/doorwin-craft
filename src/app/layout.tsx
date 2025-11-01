@@ -3,6 +3,7 @@ import { Providers } from './providers';
 import { Header } from '@/src/components/Layout/Header';
 import { Footer } from '@/src/components/Layout/Footer';
 import { ErrorBoundary } from '@/src/components/ErrorBoundary';
+import { Polyfills } from '@/src/components/Polyfills';
 
 export const metadata = {
   title: 'DoorWin Craft',
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body style={{ margin: 0, padding: 0, WebkitFontSmoothing: 'antialiased', WebkitTapHighlightColor: 'transparent', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Polyfills />
         <ErrorBoundary>
           <Providers>
             <Header />
