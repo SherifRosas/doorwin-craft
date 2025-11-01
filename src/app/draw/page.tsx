@@ -236,7 +236,14 @@ export default function DesignerPage() {
   };
 
   return (
-    <div style={{ display: 'flex', height: 'calc(100vh - 92px)', flexDirection: 'column' }}>
+    <div style={{ 
+      display: 'flex', 
+      height: 'calc(100vh - 92px)',
+      height: isMobile ? 'calc(100dvh - 92px)' : 'calc(100vh - 92px)', // Use dvh on mobile for iOS
+      flexDirection: 'column',
+      overflow: 'hidden',
+      WebkitOverflowScrolling: 'touch'
+    }}>
       <div style={{ 
         padding: '12px 24px', 
         borderBottom: '1px solid #ddd', 

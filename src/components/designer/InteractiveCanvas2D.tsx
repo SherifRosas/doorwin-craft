@@ -366,7 +366,13 @@ export function InteractiveCanvas2D({
   }, [draw, design, zoom, pan]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div style={{ 
+      position: 'relative', 
+      width: '100%', 
+      height: '100%',
+      WebkitOverflowScrolling: 'touch',
+      overflow: 'hidden'
+    }}>
       <canvas
         ref={canvasRef}
         style={{ 
@@ -374,7 +380,11 @@ export function InteractiveCanvas2D({
           height: '100%', 
           display: 'block', 
           cursor: activeHandle ? 'ew-resize' : isDragging ? 'grabbing' : 'grab',
-          touchAction: 'none' // Prevent default touch behaviors
+          touchAction: 'none', // Prevent default touch behaviors
+          WebkitTapHighlightColor: 'transparent',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          msUserSelect: 'none'
         }}
       />
       <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255,255,255,0.95)', padding: '8px', borderRadius: '4px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
