@@ -194,13 +194,16 @@ export function InteractiveCanvas2D({
       ctx.restore();
     }
 
-    // Drag handles
+    // Drag handles - larger on mobile for touch
+    const isMobile = window.innerWidth < 768;
+    const handleRadius = isMobile ? 20 : 8;
+    const handleLineWidth = isMobile ? 3 : 2;
     handles.forEach(handle => {
       ctx.fillStyle = handle.active ? '#ff6b35' : '#2196f3';
       ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2;
+      ctx.lineWidth = handleLineWidth;
       ctx.beginPath();
-      ctx.arc(handle.x, handle.y, 8, 0, Math.PI * 2);
+      ctx.arc(handle.x, handle.y, handleRadius, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
     });
