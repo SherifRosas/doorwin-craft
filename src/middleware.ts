@@ -12,18 +12,16 @@ export function middleware(request: NextRequest) {
   const isDev = process.env.NODE_ENV !== 'production';
   const csp = [
     "default-src 'self'",
-    // In dev, relax to allow Next.js/devtools inline/eval and third-party scripts
-    isDev
-      ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:"
-      : "script-src 'self' 'strict-dynamic'",
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: https:",
-    "connect-src 'self' https:",
+    // Allow Next.js scripts, inline scripts (Next.js uses them), and trusted sources
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: *.vercel.app *.vercel-insights.com",
+    "style-src 'self' 'unsafe-inline' https:",
+    "img-src 'self' data: https: blob:",
+    "connect-src 'self' https: *.vercel.app *.vercel-insights.com wss:",
     "font-src 'self' data: https:",
-    // Allow iframes from payment providers in app (checkout) in dev; adjust for prod as needed
-    isDev ? "frame-src 'self' https:" : undefined,
+    "frame-src 'self' https:",
+    "worker-src 'self' blob:",
     "frame-ancestors 'none'",
-    "base-uri 'none'"
+    "base-uri 'self'"
   ]
     .filter(Boolean)
     .join('; ');
