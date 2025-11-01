@@ -24,22 +24,36 @@ export default function DashboardPage() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth < 768);
+      }
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', checkMobile);
+      }
+    };
   }, []);
 
   useEffect(() => {
     // Get user from localStorage or token (client-side only) - Optimized for speed
     if (typeof window === 'undefined') {
+      // Server-side: set default user
+      setUser({ 
+        id: 'guest', 
+        email: 'guest@example.com', 
+        orgId: 'default-org' 
+      });
       setLoading(false);
       return;
     }
     
-    // Fast path: allow guest access immediately, then try to upgrade to authenticated
+    // Client-side: Fast path - allow guest access immediately
     setUser({ 
       id: 'guest', 
       email: 'guest@example.com', 
@@ -48,28 +62,37 @@ export default function DashboardPage() {
     setLoading(false);
     
     // Then check for token in background (non-blocking)
-    setTimeout(() => {
+    const checkToken = () => {
       try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-            setUser({ 
-              id: payload.sub || payload.id, 
-              email: payload.email || 'user@example.com', 
-              orgId: payload.orgId || 'default-org' 
-            });
-            FunnelEvents.dashboard_viewed();
-          } catch (e) {
-            console.error('Invalid token:', e);
-            // Keep guest access on error
+        if (typeof localStorage !== 'undefined') {
+          const token = localStorage.getItem('token');
+          if (token) {
+            try {
+              const payload = JSON.parse(atob(token.split('.')[1]));
+              setUser({ 
+                id: payload.sub || payload.id || 'guest', 
+                email: payload.email || 'user@example.com', 
+                orgId: payload.orgId || 'default-org' 
+              });
+              FunnelEvents.dashboard_viewed();
+            } catch (e) {
+              console.error('Invalid token:', e);
+              // Keep guest access on error
+            }
           }
         }
       } catch (e) {
         console.error('Error accessing localStorage:', e);
         // Keep guest access on error
       }
-    }, 0);
+    };
+    
+    // Use requestAnimationFrame for better browser compatibility
+    if (typeof requestAnimationFrame !== 'undefined') {
+      requestAnimationFrame(checkToken);
+    } else {
+      setTimeout(checkToken, 0);
+    }
   }, []);
 
   useEffect(() => {
