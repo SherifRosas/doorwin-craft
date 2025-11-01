@@ -36,13 +36,15 @@ export function Footer() {
           gap: '8px',
           alignItems: isMobile ? 'center' : 'flex-start'
         }}>
-          <div style={{
-            fontSize: isMobile ? '18px' : '20px',
+          <h2 style={{
+            margin: 0,
+            fontSize: isMobile ? '22px' : '26px',
             color: '#ffffff',
-            fontWeight: 'bold'
+            fontWeight: 'bold',
+            textShadow: '0 2px 4px rgba(0,0,0,0.2)'
           }}>
             Sherif Rosas
-          </div>
+          </h2>
           <div style={{
             fontSize: isMobile ? '12px' : '14px',
             color: '#b0c4de',
