@@ -1,6 +1,7 @@
 import './globals.css';
 import { Providers } from './providers';
 import { Header } from '@/src/components/Layout/Header';
+import { Footer } from '@/src/components/Layout/Footer';
 import { ErrorBoundary } from '@/src/components/ErrorBoundary';
 
 export const metadata = {
@@ -31,11 +32,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
-      <body style={{ margin: 0, padding: 0, WebkitFontSmoothing: 'antialiased', WebkitTapHighlightColor: 'transparent' }}>
+      <body style={{ margin: 0, padding: 0, WebkitFontSmoothing: 'antialiased', WebkitTapHighlightColor: 'transparent', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         <ErrorBoundary>
           <Providers>
             <Header />
-            {children}
+            <main style={{ flex: 1 }}>
+              {children}
+            </main>
+            <Footer />
           </Providers>
         </ErrorBoundary>
       </body>

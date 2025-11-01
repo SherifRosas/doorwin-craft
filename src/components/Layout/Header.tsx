@@ -88,110 +88,112 @@ export function Header() {
         </Link>
 
         {isMobile ? (
-          <>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                border: '1px solid rgba(255,255,255,0.3)',
-                borderRadius: '4px',
+            <>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                style={{
+                  background: 'rgba(255,255,255,0.1)',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  borderRadius: '4px',
+                  color: '#ffffff',
+                  padding: '8px 12px',
+                  cursor: 'pointer',
+                  fontSize: '18px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}
+                aria-label="Toggle menu"
+              >
+                {mobileMenuOpen ? '✕' : '☰'}
+              </button>
+              {mobileMenuOpen && (
+                <nav style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: 0,
+                  right: 0,
+                  background: 'linear-gradient(135deg, #1e3a5f 0%, #2d4a6b 100%)',
+                  borderTop: '1px solid #3a5a7a',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  padding: '12px 0',
+                  zIndex: 1000
+                }}>
+                  <Link href="/" onClick={() => setMobileMenuOpen(false)} style={{
+                    color: '#ffffff',
+                    textDecoration: 'none',
+                    padding: '12px 24px',
+                    fontSize: '16px'
+                  }}>
+                    Home
+                  </Link>
+                  <Link href="/draw" onClick={() => setMobileMenuOpen(false)} style={{
+                    color: '#ffffff',
+                    textDecoration: 'none',
+                    padding: '12px 24px',
+                    fontSize: '16px'
+                  }}>
+                    Designer
+                  </Link>
+                  <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{
+                    color: '#ffffff',
+                    textDecoration: 'none',
+                    padding: '12px 24px',
+                    fontSize: '16px'
+                  }}>
+                    Dashboard
+                  </Link>
+                </nav>
+              )}
+            </>
+          ) : (
+            <nav style={{
+              display: 'flex',
+              gap: '16px',
+              alignItems: 'center'
+            }}>
+              <Link href="/" style={{
                 color: '#ffffff',
-                padding: '8px 12px',
-                cursor: 'pointer',
-                fontSize: '18px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
+                textDecoration: 'none',
+                padding: '8px 16px',
+                borderRadius: '4px',
+                transition: 'background 0.2s'
               }}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? '✕' : '☰'}
-            </button>
-            {mobileMenuOpen && (
-              <nav style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                right: 0,
-                background: 'linear-gradient(135deg, #1e3a5f 0%, #2d4a6b 100%)',
-                borderTop: '1px solid #3a5a7a',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-                display: 'flex',
-                flexDirection: 'column',
-                padding: '12px 0',
-                zIndex: 1000
-              }}>
-                <Link href="/" onClick={() => setMobileMenuOpen(false)} style={{
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  padding: '12px 24px',
-                  fontSize: '16px'
-                }}>
-                  Home
-                </Link>
-                <Link href="/draw" onClick={() => setMobileMenuOpen(false)} style={{
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  padding: '12px 24px',
-                  fontSize: '16px'
-                }}>
-                  Designer
-                </Link>
-                <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} style={{
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  padding: '12px 24px',
-                  fontSize: '16px'
-                }}>
-                  Dashboard
-                </Link>
-              </nav>
-            )}
-          </>
-        ) : (
-          <nav style={{
-            display: 'flex',
-            gap: '16px',
-            alignItems: 'center'
-          }}>
-          <Link href="/" style={{
-            color: '#ffffff',
-            textDecoration: 'none',
-            padding: '8px 16px',
-            borderRadius: '4px',
-            transition: 'background 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-          >
-            Home
-          </Link>
-          <Link href="/draw" style={{
-            color: '#ffffff',
-            textDecoration: 'none',
-            padding: '8px 16px',
-            borderRadius: '4px',
-            transition: 'background 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-          >
-            Designer
-          </Link>
-          <Link href="/dashboard" style={{
-            color: '#ffffff',
-            textDecoration: 'none',
-            padding: '8px 16px',
-            borderRadius: '4px',
-            transition: 'background 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-          >
-            Dashboard
-          </Link>
-        </nav>
-        )}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                Home
+              </Link>
+              <Link href="/draw" style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                padding: '8px 16px',
+                borderRadius: '4px',
+                transition: 'background 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                Designer
+              </Link>
+              <Link href="/dashboard" style={{
+                color: '#ffffff',
+                textDecoration: 'none',
+                padding: '8px 16px',
+                borderRadius: '4px',
+                transition: 'background 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                Dashboard
+              </Link>
+            </nav>
+          )}
+        </div>
       </div>
       
       {/* Fullscreen Logo Modal */}
