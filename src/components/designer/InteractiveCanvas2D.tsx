@@ -62,7 +62,9 @@ export function InteractiveCanvas2D({
   }, []);
 
   const findHandleAtPoint = useCallback((x: number, y: number, handles: DragHandle[]): DragHandle | null => {
-    const handleSize = 12;
+    // Larger handles on mobile for better touch interaction
+    const isMobile = window.innerWidth < 768;
+    const handleSize = isMobile ? 24 : 12;
     for (const handle of handles) {
       const dx = x - handle.x;
       const dy = y - handle.y;
@@ -251,10 +253,19 @@ export function InteractiveCanvas2D({
       setZoom((prev) => Math.max(0.5, Math.min(3, prev * delta)));
     };
 
-    const handleMouseDown = (e: MouseEvent) => {
+    const getEventCoordinates = (e: MouseEvent | TouchEvent): { clientX: number; clientY: number } => {
+      if ('touches' in e && e.touches.length > 0) {
+        return { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY };
+      }
+      return { clientX: (e as MouseEvent).clientX, clientY: (e as MouseEvent).clientY };
+    };
+
+    const handleStart = (e: MouseEvent | TouchEvent) => {
+      e.preventDefault();
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const coords = getEventCoordinates(e);
+      const x = coords.clientX - rect.left;
+      const y = coords.clientY - rect.top;
       
       const handles = getDragHandles();
       const handle = findHandleAtPoint(x, y, handles);
@@ -262,17 +273,23 @@ export function InteractiveCanvas2D({
       if (handle) {
         setActiveHandle(handle);
         setIsDragging(true);
-        setDragStart({ x: e.clientX, y: e.clientY });
+        setDragStart({ x: coords.clientX, y: coords.clientY });
       } else {
         setIsDragging(true);
-        setDragStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+        setDragStart({ x: coords.clientX - pan.x, y: coords.clientY - pan.y });
       }
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseDown = (e: MouseEvent) => handleStart(e);
+    const handleTouchStart = (e: TouchEvent) => handleStart(e);
+
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      e.preventDefault();
+      const coords = getEventCoordinates(e);
+      
       if (!isDragging || !activeHandle) {
         if (isDragging && !activeHandle) {
-          setPan({ x: e.clientX - dragStart.x, y: e.clientY - dragStart.y });
+          setPan({ x: coords.clientX - dragStart.x, y: coords.clientY - dragStart.y });
         }
         return;
       }
@@ -282,22 +299,22 @@ export function InteractiveCanvas2D({
       const bounds = getDesignBounds();
       
       if (activeHandle.id === 'width') {
-        const newX = e.clientX - rect.left;
+        const newX = coords.clientX - rect.left;
         const newWidth = ((newX - bounds.x) / scale);
         const snapped = snapToGrid(newWidth);
         if (snapped >= 300 && snapped <= 3000) {
           onDesignChange({ width: snapped });
         }
       } else if (activeHandle.id === 'height') {
-        const newY = e.clientY - rect.top;
+        const newY = coords.clientY - rect.top;
         const newHeight = ((newY - bounds.y) / scale);
         const snapped = snapToGrid(newHeight);
         if (snapped >= 300 && snapped <= 3000) {
           onDesignChange({ height: snapped });
         }
       } else if (activeHandle.id === 'corner') {
-        const newX = e.clientX - rect.left;
-        const newY = e.clientY - rect.top;
+        const newX = coords.clientX - rect.left;
+        const newY = coords.clientY - rect.top;
         const newWidth = ((newX - bounds.x) / scale);
         const newHeight = ((newY - bounds.y) / scale);
         const snappedW = snapToGrid(newWidth);
@@ -308,24 +325,36 @@ export function InteractiveCanvas2D({
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseMove = (e: MouseEvent) => handleMove(e);
+    const handleTouchMove = (e: TouchEvent) => handleMove(e);
+
+    const handleEnd = () => {
       setIsDragging(false);
       setActiveHandle(null);
     };
+
+    const handleMouseUp = () => handleEnd();
+    const handleTouchEnd = () => handleEnd();
 
     resize();
     window.addEventListener('resize', resize);
     canvas.addEventListener('wheel', handleWheel);
     canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchend', handleTouchEnd);
 
     return () => {
       window.removeEventListener('resize', resize);
       canvas.removeEventListener('wheel', handleWheel);
       canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isDragging, activeHandle, dragStart, pan, getScale, getDesignBounds, getDragHandles, findHandleAtPoint, snapToGrid, onDesignChange, draw]);
 
@@ -337,7 +366,13 @@ export function InteractiveCanvas2D({
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <canvas
         ref={canvasRef}
-        style={{ width: '100%', height: '100%', display: 'block', cursor: activeHandle ? 'ew-resize' : isDragging ? 'grabbing' : 'grab' }}
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          display: 'block', 
+          cursor: activeHandle ? 'ew-resize' : isDragging ? 'grabbing' : 'grab',
+          touchAction: 'none' // Prevent default touch behaviors
+        }}
       />
       <div style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(255,255,255,0.95)', padding: '8px', borderRadius: '4px', fontSize: '12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <div>Zoom: {Math.round(zoom * 100)}%</div>
