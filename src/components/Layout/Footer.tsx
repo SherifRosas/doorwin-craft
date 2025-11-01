@@ -36,21 +36,28 @@ export function Footer() {
           gap: '8px',
           alignItems: isMobile ? 'center' : 'flex-start'
         }}>
-          <h2 style={{
-            margin: 0,
-            fontSize: isMobile ? '22px' : '26px',
-            color: '#ffffff',
-            fontWeight: 'bold',
-            textShadow: '0 2px 4px rgba(0,0,0,0.2)'
-          }}>
-            Sherif Rosas
-          </h2>
           <div style={{
-            fontSize: isMobile ? '12px' : '14px',
-            color: '#b0c4de',
-            fontStyle: 'italic'
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px'
           }}>
-            Professional Window & Door Design Expert
+            <h2 style={{
+              margin: 0,
+              fontSize: isMobile ? '22px' : '26px',
+              color: '#ffffff',
+              fontWeight: 'bold',
+              textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+            }}>
+              Sherif Rosas
+            </h2>
+            <div style={{
+              fontSize: isMobile ? '14px' : '16px',
+              color: '#ffffff',
+              fontWeight: '500',
+              opacity: 0.9
+            }}>
+              AI Developer
+            </div>
           </div>
         </div>
 
@@ -61,7 +68,7 @@ export function Footer() {
           gap: isMobile ? '12px' : '20px'
         }}>
           <a 
-            href="tel:+966XXXXXXXXX" 
+            href="tel:+201065661882" 
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -74,7 +81,8 @@ export function Footer() {
               background: 'rgba(255,255,255,0.1)',
               transition: 'all 0.2s',
               border: '1px solid rgba(255,255,255,0.2)',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
@@ -86,11 +94,11 @@ export function Footer() {
             }}
           >
             <span style={{ fontSize: '20px' }}>📞</span>
-            <span style={{ direction: 'ltr', display: 'inline-block' }}>+966XXXXXXXXX</span>
+            <span style={{ direction: 'ltr', display: 'inline-block' }}>+201065661882</span>
           </a>
           
           <a 
-            href="https://wa.me/966XXXXXXXXX" 
+            href="https://wa.me/201065661882" 
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -105,7 +113,8 @@ export function Footer() {
               background: 'rgba(37, 211, 102, 0.2)',
               transition: 'all 0.2s',
               border: '1px solid rgba(37, 211, 102, 0.3)',
-              whiteSpace: 'nowrap'
+              whiteSpace: 'nowrap',
+              cursor: 'pointer'
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = 'rgba(37, 211, 102, 0.3)';
