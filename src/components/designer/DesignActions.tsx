@@ -3,14 +3,16 @@ import { useState } from 'react';
 import type { DesignConfig } from '@/src/app/draw/page';
 import { FunnelEvents } from '@/src/lib/analytics';
 import { LoadingButton } from '@/src/components/LoadingSpinner';
+import { MaterialBreakdown } from '@/src/components/designer/MaterialBreakdown';
 
 interface DesignActionsProps {
   design: DesignConfig;
   onSaveSuccess?: (message?: string) => void;
   onSaveError?: (error: string) => void;
+  onPriceCalculated?: (price: number) => void;
 }
 
-export function DesignActions({ design, onSaveSuccess, onSaveError }: DesignActionsProps) {
+export function DesignActions({ design, onSaveSuccess, onSaveError, onPriceCalculated }: DesignActionsProps) {
   const [saving, setSaving] = useState(false);
   const [price, setPrice] = useState<number | null>(null);
 
@@ -100,10 +102,20 @@ export function DesignActions({ design, onSaveSuccess, onSaveError }: DesignActi
     const removalCost = design.work?.removal ? 100 : 0; // Base removal cost
     const workCost = installationCost + removalCost;
     
+    // Profile multipliers
+    const profileMultiplier: Record<string, number> = {
+      square: 1.0,
+      chamfer: 1.05,
+      ovolo: 1.08,
+      round: 1.1,
+    };
+    const pType = (design as any).profileType || 'square';
+
     // Calculate total
     const windowCost = basePrice * 
       (materialMultiplier[design.material] || 1) * 
-      (templateMultiplier[design.template] || 1) +
+      (templateMultiplier[design.template] || 1) *
+      (profileMultiplier[pType] || 1) +
       (design.glass ? 100 : 0) +
       hardwareCost;
     
@@ -111,6 +123,11 @@ export function DesignActions({ design, onSaveSuccess, onSaveError }: DesignActi
     const finalPrice = Math.round(total);
 
     setPrice(finalPrice);
+    
+    // Notify parent component of calculated price
+    if (onPriceCalculated) {
+      onPriceCalculated(finalPrice);
+    }
     
     // Track price calculation
     const components = [];
@@ -219,23 +236,27 @@ export function DesignActions({ design, onSaveSuccess, onSaveError }: DesignActi
       </LoadingButton>
 
       {price !== null && (
-        <div style={{ 
-          padding: '12px', 
-          background: '#f0f0f0', 
-          borderRadius: '4px',
-          marginBottom: '8px',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '4px' }}>
-            {price} SAR
+        <>
+          <div style={{ 
+            padding: '12px', 
+            background: '#f0f0f0', 
+            borderRadius: '4px',
+            marginBottom: '8px',
+            textAlign: 'center'
+          }}>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '4px' }}>
+              {price} SAR
+            </div>
+            <div style={{ fontSize: '11px', color: '#666' }}>
+              (Excluding 15% VAT)
+            </div>
           </div>
-          <div style={{ fontSize: '11px', color: '#666' }}>
-            (Excluding 15% VAT)
-          </div>
-        </div>
+          <MaterialBreakdown design={design} />
+        </>
       )}
 
       <LoadingButton
+        data-save-button="true"
         loading={saving}
         onClick={saveDesign}
         style={{

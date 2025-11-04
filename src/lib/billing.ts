@@ -1,5 +1,4 @@
 import { db } from './db';
-import { SubscriptionStatus } from '@prisma/client';
 
 export type SubscriptionStatusType = 'trial_active' | 'subscribed_active' | 'past_due' | 'canceled';
 
