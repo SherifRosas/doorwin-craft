@@ -1,0 +1,42 @@
+winFileVersion ::: 3
+winPin ::: 
+winCode ::: wblock{vsx{0.0 1000.0}vsx vsy{0.0 1000.0}vsy pns{0:0 1:1}pns frs{0:1}frs ops{0:1}ops imps{}imps opsfrs{0}opsfrs impsfrs{-1}impsfrs}wblock
+winDimentionsArray :::  
+winOpeningsArray :::  OPEN_NONE
+winIsDoorArray :::  false
+winMosquitoNetArray :::  false
+winDescription ::: win-cost 57561.44 total-cost 2629882.68
+winAmount ::: 1
+winPriceOverride ::: null
+winAutor ::: 
+winFinance ::: 00_1_finance
+winSystem ::: 01_1_win_system
+winGlass ::: 04_1_glass
+winMoskitonet ::: 
+winFurniture ::: 
+winLaminationInner ::: 
+winLaminationOuter ::: 
+winColors ::: 34_1_alder
+winInnerSill ::: 10_1_inner_sill
+winInnerSill_extra ::: 10_1_inner_sill ex{vl[2222.0]vl pc[2]pc}ex
+winOuterSill ::: 07_1_outer_sill
+winOuterSill_extra ::: 07_1_outer_sill ex{vl[1111.0]vl pc[1]pc}ex
+winWorks ::: 
+winAditions ::: 
+winAddonSeatProfile ::: false
+winAddonDorsill ::: false
+winAddonCornerJamb ::: false
+winAddonJointProfile ::: false false false false
+winAddonJointProfile90deg ::: false false false false
+winAddonJointProfile135deg ::: false false false false
+winAddonGapProfile ::: false false false false
+winAddonExtender15 ::: false false false false
+winAddonExtender20 ::: false false false false
+winAddonExtender40 ::: false false false false
+winAddonExtender60 ::: false false false false
+winAddonExtender80 ::: false false false false
+winAddonExtender100 ::: false false false false
+winLeafsIimpostsDimentions ::: 0.0 0.0
+winLeafImposts ::: LEAF_IMPOST_NONE
+winIsSandwiches ::: false false false
+winGlazingBars ::: 1x0 0x0 0x0

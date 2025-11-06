@@ -631,19 +631,35 @@ export default function DesignerPage() {
         }}
         onMoveUp={() => {
           // Pan canvas up
-          canvasActionsRef.current?.panBy?.(0, 50);
+          if (canvasActionsRef.current?.panBy) {
+            canvasActionsRef.current.panBy(0, 50);
+          } else {
+            showToast('Canvas not ready. Please wait...', 'info');
+          }
         }}
         onMoveDown={() => {
           // Pan canvas down
-          canvasActionsRef.current?.panBy?.(0, -50);
+          if (canvasActionsRef.current?.panBy) {
+            canvasActionsRef.current.panBy(0, -50);
+          } else {
+            showToast('Canvas not ready. Please wait...', 'info');
+          }
         }}
         onMoveLeft={() => {
           // Pan canvas left
-          canvasActionsRef.current?.panBy?.(50, 0);
+          if (canvasActionsRef.current?.panBy) {
+            canvasActionsRef.current.panBy(50, 0);
+          } else {
+            showToast('Canvas not ready. Please wait...', 'info');
+          }
         }}
         onMoveRight={() => {
           // Pan canvas right
-          canvasActionsRef.current?.panBy?.(-50, 0);
+          if (canvasActionsRef.current?.panBy) {
+            canvasActionsRef.current.panBy(-50, 0);
+          } else {
+            showToast('Canvas not ready. Please wait...', 'info');
+          }
         }}
         onResizeVertical={() => {
           // Increase height by 100mm (use undo to decrease)
@@ -681,8 +697,13 @@ export default function DesignerPage() {
         onToggleGrid={() => {
           const newGridState = !showGrid;
           setShowGrid(newGridState);
-          canvasActionsRef.current?.setGrid?.(newGridState);
-          showToast(`Grid ${newGridState ? 'enabled' : 'disabled'}`, 'success');
+          if (canvasActionsRef.current?.setGrid) {
+            canvasActionsRef.current.setGrid(newGridState);
+            showToast(`Grid ${newGridState ? 'enabled' : 'disabled'}`, 'success');
+          } else {
+            // Fallback: just update state
+            showToast(`Grid ${newGridState ? 'enabled' : 'disabled'}`, 'success');
+          }
         }}
         onMoreOptions={() => setSidebarOpen(!sidebarOpen)}
       />
@@ -872,8 +893,19 @@ export default function DesignerPage() {
             </div>
           </CollapsibleSection>
           
+          {/* Quick Template Icons - All Templates */}
+          <CollapsibleSection title="Quick Template Icons (All Templates)" defaultOpen={true} icon="⚡">
+            <CompactTemplatePanel 
+              design={design} 
+              onTemplateChange={(template) => {
+                updateDesign({ template });
+                showToast(`Template changed to ${template}`, 'success');
+              }}
+            />
+          </CollapsibleSection>
+
           {/* Template Gallery - Visual List */}
-          <CollapsibleSection title="All Templates" defaultOpen={false} icon="📋">
+          <CollapsibleSection title="All Templates (Detailed)" defaultOpen={false} icon="📋">
             <div style={{ marginBottom: '12px' }}>
               <label style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 'bold' }}>
                 Type:

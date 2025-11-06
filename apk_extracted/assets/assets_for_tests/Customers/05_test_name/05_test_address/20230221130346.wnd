@@ -1,0 +1,42 @@
+winFileVersion ::: 3
+winPin ::: 
+winCode ::: wblock{vsx{0.0 1222.0}vsx vsy{0.0 555.0 2333.0}vsy pns{0:0 0:1 1:1 1:2}pns frs{0:3}frs ops{0:2 1:3}ops imps{1:2}imps opsfrs{0|1}opsfrs impsfrs{0}impsfrs}wblock
+winDimentionsArray :::  
+winOpeningsArray :::  OPEN_NONE OPEN_NONE
+winIsDoorArray :::  false false
+winMosquitoNetArray :::  false false
+winDescription ::: win-cost 351325.91
+winAmount ::: 2
+winPriceOverride ::: null
+winAutor ::: 
+winFinance ::: 00_2_finance
+winSystem ::: 02_2_win_system
+winGlass ::: 05_2_glass
+winMoskitonet ::: 29_2_mosquito_net
+winFurniture ::: 13_1_furniture
+winLaminationInner ::: 32_2_lamination
+winLaminationOuter ::: 32_2_lamination
+winColors ::: 35_2_ash
+winInnerSill ::: 11_2_inner_sill :: 12_3_inner_sill
+winInnerSill_extra ::: 11_2_inner_sill :: 12_3_inner_sill
+winOuterSill ::: 08_2_outer_sill :: 09_3_outer_sill
+winOuterSill_extra ::: 08_2_outer_sill :: 09_3_outer_sill
+winWorks ::: 23_2_job :: 24_3_job :: 25_4_job :: 26_5_job :: 27_6_job
+winAditions ::: 17_2_extra_material :: 18_3_extra_material :: 19_4_extra_material :: 20_5_extra_material :: 21_6_extra_material
+winAddonSeatProfile ::: true
+winAddonDorsill ::: true
+winAddonCornerJamb ::: false
+winAddonJointProfile ::: true true true false
+winAddonJointProfile90deg ::: true true false true
+winAddonJointProfile135deg ::: true false true true
+winAddonGapProfile ::: false true true true
+winAddonExtender15 ::: true true true false
+winAddonExtender20 ::: true true false true
+winAddonExtender40 ::: true false true true
+winAddonExtender60 ::: false true true true
+winAddonExtender80 ::: true false true true
+winAddonExtender100 ::: true true false true
+winLeafsIimpostsDimentions ::: 0.0 0.0 :: 0.0 0.0
+winLeafImposts ::: LEAF_IMPOST_NONE LEAF_IMPOST_NONE
+winIsSandwiches ::: false false false :: false false false
+winGlazingBars ::: 0x0 0x0 0x0 :: 2x0 0x0 0x0

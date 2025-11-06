@@ -196,23 +196,79 @@ export function InteractiveCanvas2D({
     ctx.shadowOffsetY = 4 * scale;
     
     // Draw outer frame with realistic depth
-    ctx.fillStyle = design.color;
-    ctx.fillRect(bounds.x, bounds.y, bounds.w, bounds.h);
-    
-    // Frame highlight (top edge lighting)
-    const highlightGradient = ctx.createLinearGradient(bounds.x, bounds.y, bounds.x, bounds.y + frameThickness);
-    const baseColor = design.color;
-    highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
-    highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-    ctx.fillStyle = highlightGradient;
-    ctx.fillRect(bounds.x, bounds.y, bounds.w, frameThickness);
-    
-    // Frame shadow (bottom edge)
-    const shadowGradient = ctx.createLinearGradient(bounds.x, bounds.y + bounds.h - frameThickness, bounds.x, bounds.y + bounds.h);
-    shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-    shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
-    ctx.fillStyle = shadowGradient;
-    ctx.fillRect(bounds.x, bounds.y + bounds.h - frameThickness, bounds.w, frameThickness);
+    if (design.template === 'arch') {
+      // Arch window frame - rounded top
+      const archRadius = bounds.w * 0.5;
+      const archCenterX = bounds.x + bounds.w / 2;
+      const archTopY = bounds.y;
+      
+      ctx.fillStyle = design.color;
+      ctx.beginPath();
+      ctx.arc(archCenterX, archTopY, archRadius, Math.PI, 0, false);
+      ctx.lineTo(bounds.x + bounds.w, bounds.y + bounds.h);
+      ctx.lineTo(bounds.x, bounds.y + bounds.h);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Arch frame highlight
+      const highlightGradient = ctx.createRadialGradient(archCenterX, archTopY, 0, archCenterX, archTopY, archRadius);
+      highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+      highlightGradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.2)');
+      highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = highlightGradient;
+      ctx.beginPath();
+      ctx.arc(archCenterX, archTopY, archRadius, Math.PI, 0, false);
+      ctx.lineTo(bounds.x + bounds.w, bounds.y + bounds.h * 0.3);
+      ctx.lineTo(bounds.x, bounds.y + bounds.h * 0.3);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Arch frame shadow
+      const shadowGradient = ctx.createLinearGradient(bounds.x, bounds.y + bounds.h - frameThickness, bounds.x, bounds.y + bounds.h);
+      shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+      ctx.fillStyle = shadowGradient;
+      ctx.fillRect(bounds.x, bounds.y + bounds.h - frameThickness, bounds.w, frameThickness);
+      
+      // Arch frame border
+      ctx.strokeStyle = '#1a1a1a';
+      ctx.lineWidth = 2 * scale;
+      ctx.beginPath();
+      ctx.arc(archCenterX, archTopY, archRadius, Math.PI, 0, false);
+      ctx.lineTo(bounds.x + bounds.w, bounds.y + bounds.h);
+      ctx.lineTo(bounds.x, bounds.y + bounds.h);
+      ctx.closePath();
+      ctx.stroke();
+    } else {
+      // Standard rectangular frame
+      ctx.fillStyle = design.color;
+      ctx.fillRect(bounds.x, bounds.y, bounds.w, bounds.h);
+      
+      // Frame highlight (top edge lighting)
+      const highlightGradient = ctx.createLinearGradient(bounds.x, bounds.y, bounds.x, bounds.y + frameThickness);
+      const baseColor = design.color;
+      highlightGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+      highlightGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = highlightGradient;
+      ctx.fillRect(bounds.x, bounds.y, bounds.w, frameThickness);
+      
+      // Frame shadow (bottom edge)
+      const shadowGradient = ctx.createLinearGradient(bounds.x, bounds.y + bounds.h - frameThickness, bounds.x, bounds.y + bounds.h);
+      shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+      shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+      ctx.fillStyle = shadowGradient;
+      ctx.fillRect(bounds.x, bounds.y + bounds.h - frameThickness, bounds.w, frameThickness);
+      
+      // Outer frame border with depth
+      ctx.strokeStyle = '#1a1a1a';
+      ctx.lineWidth = 2 * scale;
+      ctx.strokeRect(bounds.x, bounds.y, bounds.w, bounds.h);
+      
+      // Inner frame border (creates depth)
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+      ctx.lineWidth = 1 * scale;
+      ctx.strokeRect(bounds.x + 1, bounds.y + 1, bounds.w - 2, bounds.h - 2);
+    }
     
     // Material-based texture
     if (design.material === 'wood') {
@@ -232,20 +288,21 @@ export function InteractiveCanvas2D({
       aluminumGradient.addColorStop(0.5, 'rgba(200, 200, 200, 0.1)');
       aluminumGradient.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
       ctx.fillStyle = aluminumGradient;
-      ctx.fillRect(bounds.x, bounds.y, bounds.w, bounds.h);
+      if (design.template === 'arch') {
+        const archRadius = bounds.w * 0.5;
+        const archCenterX = bounds.x + bounds.w / 2;
+        ctx.beginPath();
+        ctx.arc(archCenterX, bounds.y, archRadius, Math.PI, 0, false);
+        ctx.lineTo(bounds.x + bounds.w, bounds.y + bounds.h);
+        ctx.lineTo(bounds.x, bounds.y + bounds.h);
+        ctx.closePath();
+        ctx.fill();
+      } else {
+        ctx.fillRect(bounds.x, bounds.y, bounds.w, bounds.h);
+      }
     }
     
     ctx.shadowColor = 'transparent';
-    
-    // Outer frame border with depth
-    ctx.strokeStyle = '#1a1a1a';
-    ctx.lineWidth = 2 * scale;
-    ctx.strokeRect(bounds.x, bounds.y, bounds.w, bounds.h);
-    
-    // Inner frame border (creates depth)
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-    ctx.lineWidth = 1 * scale;
-    ctx.strokeRect(bounds.x + 1, bounds.y + 1, bounds.w - 2, bounds.h - 2);
 
     // Inner frame styling based on profileType (ovolo/chamfer/round/square)
     const profileType = (design as any).profileType || 'square';
@@ -624,31 +681,133 @@ export function InteractiveCanvas2D({
           ctx.restore();
         }
       }
-    } else if (design.template === 'bay' || design.template === 'bow') {
-      // Bay/Bow windows - subtle projection animation
+    } else if (design.template === 'bay') {
+      // Bay window - 3-panel angled projection (curved structure)
       const sashInset = 20 * scale;
-      const projection = Math.sin(casementAngleRef.current * Math.PI / 180) * 10 * scale; // Subtle movement
+      const mullionWidth = 3 * scale;
+      const centerPanelWidth = (bounds.w - sashInset * 2) * 0.4;
+      const sidePanelWidth = (bounds.w - sashInset * 2) * 0.28;
+      const projectionOffset = 40 * scale; // Visual offset to show projection
       
       if (design.glass) {
-        // Center panel
-        ctx.fillStyle = '#e8f4f8';
-        ctx.fillRect(bounds.x + sashInset, bounds.y + sashInset, bounds.w - sashInset * 2, bounds.h - sashInset * 2);
-        ctx.strokeStyle = '#666';
-        ctx.lineWidth = 2 * scale;
-        ctx.strokeRect(bounds.x + sashInset, bounds.y + sashInset, bounds.w - sashInset * 2, bounds.h - sashInset * 2);
+        // Center panel (projects forward)
+        const centerX = bounds.x + bounds.w / 2 - centerPanelWidth / 2;
+        const centerY = bounds.y + sashInset - projectionOffset * 0.3;
+        drawRealisticGlass(ctx, centerX, centerY, centerPanelWidth, bounds.h - sashInset * 2, scale, false);
         
-        // Side panels (for bay window effect)
-        if (design.template === 'bay') {
-          const sidePanelWidth = (bounds.w - sashInset * 2) * 0.25;
-          // Left side
-          ctx.fillRect(bounds.x + sashInset - projection, bounds.y + sashInset, sidePanelWidth, bounds.h - sashInset * 2);
-          ctx.strokeRect(bounds.x + sashInset - projection, bounds.y + sashInset, sidePanelWidth, bounds.h - sashInset * 2);
-          // Right side
-          ctx.fillRect(bounds.x + bounds.w - sashInset - sidePanelWidth + projection, bounds.y + sashInset, 
-                       sidePanelWidth, bounds.h - sashInset * 2);
-          ctx.strokeRect(bounds.x + bounds.w - sashInset - sidePanelWidth + projection, bounds.y + sashInset,
-                         sidePanelWidth, bounds.h - sashInset * 2);
+        // Left side panel (angled, shifted to show curve)
+        const leftPanelX = bounds.x + sashInset;
+        const leftPanelY = bounds.y + sashInset;
+        drawRealisticGlass(ctx, leftPanelX, leftPanelY, sidePanelWidth, bounds.h - sashInset * 2, scale, false);
+        
+        // Right side panel (angled, shifted to show curve)
+        const rightPanelX = bounds.x + bounds.w - sashInset - sidePanelWidth;
+        const rightPanelY = bounds.y + sashInset;
+        drawRealisticGlass(ctx, rightPanelX, rightPanelY, sidePanelWidth, bounds.h - sashInset * 2, scale, false);
+        
+        // Draw mullions between panels
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = mullionWidth;
+        ctx.beginPath();
+        // Left mullion (between left and center)
+        const leftMullionX = bounds.x + sashInset + sidePanelWidth;
+        ctx.moveTo(leftMullionX, bounds.y + sashInset);
+        ctx.lineTo(leftMullionX, bounds.y + bounds.h - sashInset);
+        // Right mullion (between center and right)
+        const rightMullionX = bounds.x + bounds.w - sashInset - sidePanelWidth;
+        ctx.moveTo(rightMullionX, bounds.y + sashInset);
+        ctx.lineTo(rightMullionX, bounds.y + bounds.h - sashInset);
+        ctx.stroke();
+        
+        // Draw curved projection outline
+        ctx.strokeStyle = '#5a6578';
+        ctx.lineWidth = 2 * scale;
+        ctx.setLineDash([5 * scale, 3 * scale]);
+        ctx.beginPath();
+        // Top curve showing projection
+        const topY = bounds.y + sashInset;
+        ctx.moveTo(bounds.x + sashInset, topY);
+        ctx.quadraticCurveTo(bounds.x + bounds.w / 2, topY - projectionOffset, bounds.x + bounds.w - sashInset, topY);
+        ctx.stroke();
+        // Bottom curve (sill)
+        const bottomY = bounds.y + bounds.h - sashInset;
+        ctx.beginPath();
+        ctx.moveTo(bounds.x + sashInset, bottomY);
+        ctx.quadraticCurveTo(bounds.x + bounds.w / 2, bottomY + projectionOffset * 0.5, bounds.x + bounds.w - sashInset, bottomY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    } else if (design.template === 'bow') {
+      // Bow window - 5-panel curved projection (smooth arc)
+      const sashInset = 20 * scale;
+      const mullionWidth = 3 * scale;
+      const panelCount = 5;
+      const totalWidth = bounds.w - sashInset * 2;
+      const panelWidth = (totalWidth - (panelCount - 1) * mullionWidth) / panelCount;
+      const projectionOffset = 50 * scale;
+      
+      if (design.glass) {
+        // Draw panels arranged in a curve
+        for (let i = 0; i < panelCount; i++) {
+          const panelIndex = i - (panelCount - 1) / 2; // -2, -1, 0, 1, 2
+          const curveOffset = Math.abs(panelIndex) * projectionOffset * 0.15; // More offset for outer panels
+          
+          // Position panel
+          const baseX = bounds.x + sashInset + i * (panelWidth + mullionWidth);
+          const panelX = baseX;
+          const panelY = bounds.y + sashInset - curveOffset;
+          
+          drawRealisticGlass(ctx, panelX, panelY, panelWidth, bounds.h - sashInset * 2, scale, false);
+          
+          // Draw mullion after panel (except last)
+          if (i < panelCount - 1) {
+            const mullionX = panelX + panelWidth;
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = mullionWidth;
+            ctx.beginPath();
+            ctx.moveTo(mullionX, bounds.y + sashInset);
+            ctx.lineTo(mullionX, bounds.y + bounds.h - sashInset);
+            ctx.stroke();
+          }
         }
+        
+        // Draw curved projection outline
+        ctx.strokeStyle = '#5a6578';
+        ctx.lineWidth = 2 * scale;
+        ctx.setLineDash([5 * scale, 3 * scale]);
+        ctx.beginPath();
+        // Top curve
+        const topY = bounds.y + sashInset;
+        ctx.moveTo(bounds.x + sashInset, topY);
+        for (let i = 0; i <= 20; i++) {
+          const t = i / 20;
+          const x = bounds.x + sashInset + (bounds.w - sashInset * 2) * t;
+          const offset = Math.sin(t * Math.PI) * projectionOffset;
+          const y = topY - offset;
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.stroke();
+        // Bottom curve (sill)
+        ctx.beginPath();
+        const bottomY = bounds.y + bounds.h - sashInset;
+        ctx.moveTo(bounds.x + sashInset, bottomY);
+        for (let i = 0; i <= 20; i++) {
+          const t = i / 20;
+          const x = bounds.x + sashInset + (bounds.w - sashInset * 2) * t;
+          const offset = Math.sin(t * Math.PI) * projectionOffset * 0.5;
+          const y = bottomY + offset;
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.stroke();
+        ctx.setLineDash([]);
       }
     } else if (design.template === 'bifold') {
       // Bifold door - panels fold in accordion style
@@ -1040,24 +1199,155 @@ export function InteractiveCanvas2D({
         const rightPanelH = bounds.h - sashInset * 2;
         drawRealisticGlass(ctx, rightPanelX, rightPanelY, rightPanelW, rightPanelH, scale, true);
       }
-    } else if ((design.template === 'fixed' || design.template === 'picture' || design.template === 'arch') && design.glass) {
-      // Fixed, Picture, Arch - no animation, realistic glass
+    } else if (design.template === 'arch') {
+      // Arch window - fanlight pattern with 2x4 grid bottom (matching reference image)
+      const sashInset = 20 * scale;
+      const mullionWidth = 3 * scale;
+      const archRadius = (bounds.w - sashInset * 2) * 0.5;
+      const archCenterX = bounds.x + bounds.w / 2;
+      const archTopY = bounds.y + sashInset;
+      const archBottomY = archTopY + archRadius;
+      const rectBottom = bounds.y + bounds.h - sashInset;
+      const rectX = bounds.x + sashInset;
+      const rectY = archBottomY;
+      const rectW = bounds.w - sashInset * 2;
+      const rectHeight = bounds.h - sashInset * 2 - archRadius;
+      
+      if (design.glass) {
+        // === ARCH TOP SECTION (Fanlight Pattern) ===
+        // Draw arch glass with fanlight mullions
+        ctx.save();
+        
+        // Clip to arch shape
+        ctx.beginPath();
+        ctx.arc(archCenterX, archTopY, archRadius, Math.PI, 0, false);
+        ctx.lineTo(rectX + rectW, archBottomY);
+        ctx.lineTo(rectX, archBottomY);
+        ctx.closePath();
+        ctx.clip();
+        
+        // Glass gradient for arch
+        const glassGradient = ctx.createLinearGradient(archCenterX - archRadius, archTopY, archCenterX + archRadius, archBottomY);
+        glassGradient.addColorStop(0, '#d0e8f5');
+        glassGradient.addColorStop(0.5, '#c8e0f0');
+        glassGradient.addColorStop(1, '#c0d8eb');
+        ctx.fillStyle = glassGradient;
+        ctx.fillRect(rectX, archTopY, rectW, archRadius);
+        
+        // Glass reflection
+        const reflectionGradient = ctx.createLinearGradient(archCenterX - archRadius * 0.3, archTopY, archCenterX + archRadius * 0.3, archTopY + archRadius * 0.5);
+        reflectionGradient.addColorStop(0, 'rgba(255, 255, 255, 0.7)');
+        reflectionGradient.addColorStop(0.5, 'rgba(200, 230, 255, 0.3)');
+        reflectionGradient.addColorStop(1, 'rgba(150, 200, 255, 0.1)');
+        ctx.fillStyle = reflectionGradient;
+        ctx.fillRect(rectX, archTopY, rectW, archRadius);
+        
+        ctx.restore();
+        
+        // Fanlight mullions - two radiating from bottom edges to meet at apex
+        // Creates 3 panes: left triangular, center trapezoidal, right triangular
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = mullionWidth;
+        ctx.beginPath();
+        
+        // Apex is at the top center of the arch
+        const apexX = archCenterX;
+        const apexY = archTopY;
+        
+        // Left mullion: from bottom-left of arch to apex
+        const leftBottomX = rectX;
+        const leftBottomY = archBottomY;
+        ctx.moveTo(leftBottomX, leftBottomY);
+        ctx.lineTo(apexX, apexY);
+        
+        // Right mullion: from bottom-right of arch to apex
+        const rightBottomX = rectX + rectW;
+        const rightBottomY = archBottomY;
+        ctx.moveTo(rightBottomX, rightBottomY);
+        ctx.lineTo(apexX, apexY);
+        
+        ctx.stroke();
+        
+        // Arch border
+        ctx.strokeStyle = '#5a6578';
+        ctx.lineWidth = 3 * scale;
+        ctx.beginPath();
+        ctx.arc(archCenterX, archTopY, archRadius, Math.PI, 0, false);
+        ctx.stroke();
+        
+        // === RECTANGULAR BOTTOM SECTION (2x4 Grid) ===
+        // Draw 2 rows x 4 columns = 8 panes
+        const rows = 2;
+        const cols = 4;
+        const paneWidth = (rectW - (cols - 1) * mullionWidth) / cols;
+        const paneHeight = (rectHeight - (rows - 1) * mullionWidth) / rows;
+        
+        // Draw each glass pane with realistic glass effect
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const paneX = rectX + col * (paneWidth + mullionWidth);
+            const paneY = rectY + row * (paneHeight + mullionWidth);
+            drawRealisticGlass(ctx, paneX, paneY, paneWidth, paneHeight, scale, false);
+          }
+        }
+        
+        // Draw horizontal mullions (between rows)
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = mullionWidth;
+        ctx.beginPath();
+        for (let row = 1; row < rows; row++) {
+          const mullionY = rectY + row * paneHeight + (row - 1) * mullionWidth;
+          ctx.moveTo(rectX, mullionY);
+          ctx.lineTo(rectX + rectW, mullionY);
+        }
+        ctx.stroke();
+        
+        // Draw vertical mullions (between columns)
+        ctx.beginPath();
+        for (let col = 1; col < cols; col++) {
+          const mullionX = rectX + col * paneWidth + (col - 1) * mullionWidth;
+          ctx.moveTo(mullionX, rectY);
+          ctx.lineTo(mullionX, rectBottom);
+        }
+        ctx.stroke();
+        
+        // Outer borders
+        ctx.strokeStyle = '#5a6578';
+        ctx.lineWidth = 3 * scale;
+        ctx.beginPath();
+        // Left vertical border
+        ctx.moveTo(rectX, archBottomY);
+        ctx.lineTo(rectX, rectBottom);
+        // Right vertical border
+        ctx.moveTo(rectX + rectW, archBottomY);
+        ctx.lineTo(rectX + rectW, rectBottom);
+        // Bottom border
+        ctx.moveTo(rectX, rectBottom);
+        ctx.lineTo(rectX + rectW, rectBottom);
+        ctx.stroke();
+        
+        // Inner highlight on arch
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.lineWidth = 1.5 * scale;
+        ctx.beginPath();
+        ctx.arc(archCenterX, archTopY, archRadius - 2, Math.PI, 0, false);
+        ctx.stroke();
+      }
+      
+      // Arch frame styling
+      ctx.strokeStyle = '#2a2a2a';
+      ctx.lineWidth = 2 * scale;
+      ctx.beginPath();
+      ctx.arc(archCenterX, archTopY, archRadius + sashInset * 0.5, Math.PI, 0, false);
+      ctx.stroke();
+    } else if ((design.template === 'fixed' || design.template === 'picture') && design.glass) {
+      // Fixed, Picture - no animation, realistic glass
       const sashInset = 20 * scale;
       const glassX = bounds.x + sashInset;
       const glassY = bounds.y + sashInset;
       const glassW = bounds.w - sashInset * 2;
       const glassH = bounds.h - sashInset * 2;
       drawRealisticGlass(ctx, glassX, glassY, glassW, glassH, scale, false);
-      
-      // Arch window special styling
-      if (design.template === 'arch') {
-        // Draw rounded top indicator
-        ctx.strokeStyle = '#999';
-        ctx.lineWidth = 2 * scale;
-        ctx.beginPath();
-        ctx.arc(bounds.x + bounds.w / 2, bounds.y + sashInset, (bounds.w - sashInset * 2) * 0.3, Math.PI, 0);
-        ctx.stroke();
-      }
     }
 
     // Simplified Dimensions - show as clean lines with values

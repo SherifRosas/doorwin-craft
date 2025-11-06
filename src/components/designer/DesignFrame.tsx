@@ -1,11 +1,14 @@
 "use client";
-import { useMemo, memo } from 'react';
+import { useMemo, memo, useRef } from 'react';
 import * as THREE from 'three';
 import type { DesignConfig } from '@/src/app/draw/page';
+import { useSlidingAnimation } from './SlidingAnimation';
 
 const scale = 0.01; // Convert mm to Three.js units
 
 export const DesignFrame = memo(function DesignFrame({ design }: { design: DesignConfig }) {
+  const panelGroupRef = useRef<THREE.Group>(null);
+  
   const material = useMemo(() => {
     const color = new THREE.Color(design.color);
     // Material properties based on material type
@@ -33,11 +36,13 @@ export const DesignFrame = memo(function DesignFrame({ design }: { design: Desig
     []
   );
 
-  const w = design.width * scale;
-  const h = design.height * scale;
-  const d = design.frameDepth * scale;
+  const { w, h, d } = useMemo(() => ({
+    w: design.width * scale,
+    h: design.height * scale,
+    d: design.frameDepth * scale
+  }), [design.width, design.height, design.frameDepth]);
 
-  const renderGlass = () => {
+  const renderGlass = useMemo(() => {
     if (!design.glass) return null;
 
     const glassW = (w - d * 2) * 0.9;
@@ -144,13 +149,35 @@ export const DesignFrame = memo(function DesignFrame({ design }: { design: Desig
       );
     }
 
+    // Sliding window/patio door - two panels with one sliding
+    if (design.template === 'sliding' || design.template === 'patio') {
+      const panelWidth = glassW * 0.45;
+      const slideOffset = panelWidth * 0.2; // One panel slides over
+      
+      return (
+        <group ref={panelGroupRef}>
+          {/* Fixed panel (back) */}
+          <mesh position={[-glassW * 0.25, 0, -d * 0.3]} material={glassMaterial}>
+            <boxGeometry args={[panelWidth, glassH, glassThickness]} />
+          </mesh>
+          {/* Sliding panel (front, slightly offset) */}
+          <mesh position={[glassW * 0.25 - slideOffset, 0, -d * 0.25]} material={glassMaterial}>
+            <boxGeometry args={[panelWidth, glassH, glassThickness]} />
+          </mesh>
+        </group>
+      );
+    }
+
     // Default single glass panel
     return (
       <mesh position={[0, 0, -d * 0.3]} material={glassMaterial}>
         <boxGeometry args={[glassW, glassH, glassThickness]} />
       </mesh>
     );
-  };
+  }, [design.glass, design.template, glassMaterial, w, h, d, panelGroupRef]);
+
+  // Apply sliding animation for sliding/patio templates
+  useSlidingAnimation(design, panelGroupRef);
 
   // Make sure we have valid dimensions
   if (w <= 0 || h <= 0 || d <= 0) {
@@ -177,6 +204,65 @@ export const DesignFrame = memo(function DesignFrame({ design }: { design: Desig
     });
   }, [design.color]);
 
+  // Visual hint for inner profile in 3D (approximation)
+  const innerProfile = useMemo(() => {
+    const profileType = (design as any).profileType || 'square';
+    const inset = Math.max(d * 0.3, 2 * scale);
+    const iw = w - inset * 2;
+    const ih = h - inset * 2;
+    const thickness = d * 0.2;
+    const hintMaterial = new THREE.MeshStandardMaterial({ color: 0x666666, roughness: 0.6, metalness: 0.1 });
+
+    if (iw <= 0 || ih <= 0) return null;
+
+    if (profileType === 'square') {
+      return (
+        <mesh position={[0, 0, 0]} material={hintMaterial}>
+          <boxGeometry args={[iw, ih, thickness]} />
+        </mesh>
+      );
+    }
+
+    if (profileType === 'chamfer') {
+      return (
+        <group>
+          <mesh position={[0, 0, 0]} material={hintMaterial}>
+            <boxGeometry args={[iw, ih, thickness]} />
+          </mesh>
+          {/* small corner chamfers */}
+          {[-1, 1].map((sx) => [-1, 1].map((sy) => (
+            <mesh key={`${sx}-${sy}`} position={[sx * (iw/2), sy * (ih/2), 0]} material={hintMaterial}>
+              <boxGeometry args={[inset * 0.2, inset * 0.2, thickness * 1.1]} />
+            </mesh>
+          )))}
+        </group>
+      );
+    }
+
+    if (profileType === 'ovolo' || profileType === 'round') {
+      const radius = Math.min(iw, ih) * (profileType === 'round' ? 0.05 : 0.03);
+      const curveGeom = new THREE.TorusGeometry(radius, thickness * 0.5, 8, 32);
+      return (
+        <group>
+          <mesh position={[ -iw/2, 0, 0]} material={hintMaterial}>
+            <boxGeometry args={[thickness * 0.6, ih, thickness]} />
+          </mesh>
+          <mesh position={[ iw/2, 0, 0]} material={hintMaterial}>
+            <boxGeometry args={[thickness * 0.6, ih, thickness]} />
+          </mesh>
+          <mesh position={[ 0, ih/2, 0]} material={hintMaterial}>
+            <boxGeometry args={[iw, thickness * 0.6, thickness]} />
+          </mesh>
+          <mesh position={[ 0, -ih/2, 0]} material={hintMaterial}>
+            <boxGeometry args={[iw, thickness * 0.6, thickness]} />
+          </mesh>
+        </group>
+      );
+    }
+
+    return null;
+  }, [design, w, h, d]);
+
   return (
     <group position={[0, 0, 0]}>
       {/* Frame - outer box - centered at origin */}
@@ -199,7 +285,10 @@ export const DesignFrame = memo(function DesignFrame({ design }: { design: Desig
       </mesh>
 
       {/* Glass panels */}
-      {renderGlass()}
+      {renderGlass}
+
+      {/* Inner profile hint */}
+      {innerProfile}
 
       {/* Mullion for double/french doors */}
       {(design.template === 'double' || design.template === 'french') && (

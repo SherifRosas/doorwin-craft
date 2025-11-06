@@ -194,7 +194,6 @@ export function Header() {
             </nav>
           )}
         </div>
-      </div>
       
       {/* Fullscreen Logo Modal */}
       {logoFullscreen && (
@@ -256,7 +255,6 @@ export function Header() {
         </div>
       )}
     </header>
-    </>
   );
 }
 

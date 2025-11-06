@@ -1,0 +1,42 @@
+winFileVersion ::: 3
+winPin ::: 
+winCode ::: wblock{vsx{0.0 444.0 888.0 1777.0}vsx vsy{0.0 555.0 1889.0 2666.0}vsy pns{0:0 0:1 1:0 1:1 2:0 2:1 2:3 3:2 3:3}pns frs{0:6 4:7}frs ops{0:3 1:6 2:5 4:7}ops imps{1:5 2:3}imps opsfrs{0|1|2 3}opsfrs impsfrs{0|1 -1}impsfrs}wblock
+winDimentionsArray :::  
+winOpeningsArray :::  OPEN_NONE OPEN_TOP_RIGHT OPEN_NONE OPEN_TOP_LEFT
+winIsDoorArray :::  false true false false
+winMosquitoNetArray :::  false false false true
+winDescription ::: win-cost 355831.44 total-cost 1045223.81
+winAmount ::: 1
+winPriceOverride ::: null
+winAutor ::: 
+winFinance ::: 00_1_finance
+winSystem ::: 01_1_win_system
+winGlass ::: 04_1_glass
+winMoskitonet ::: 28_1_mosquito_net
+winFurniture ::: 13_1_furniture
+winLaminationInner ::: 31_1_lamination
+winLaminationOuter ::: 31_1_lamination
+winColors ::: 34_1_alder
+winInnerSill ::: 10_1_inner_sill :: 11_2_inner_sill
+winInnerSill_extra ::: 10_1_inner_sill :: 11_2_inner_sill
+winOuterSill ::: 07_1_outer_sill :: 08_2_outer_sill
+winOuterSill_extra ::: 07_1_outer_sill :: 08_2_outer_sill
+winWorks ::: 22_1_job :: 23_2_job
+winAditions ::: 16_1_extra_material :: 17_2_extra_material
+winAddonSeatProfile ::: true
+winAddonDorsill ::: false
+winAddonCornerJamb ::: false
+winAddonJointProfile ::: true false false false
+winAddonJointProfile90deg ::: false true false false
+winAddonJointProfile135deg ::: false false true false
+winAddonGapProfile ::: false false false true
+winAddonExtender15 ::: true false false false
+winAddonExtender20 ::: false true false false
+winAddonExtender40 ::: false false true false
+winAddonExtender60 ::: false false false true
+winAddonExtender80 ::: false false true false
+winAddonExtender100 ::: false true false false
+winLeafsIimpostsDimentions ::: 0.0 0.0 :: 666.0 0.0 :: 0.0 0.0 :: 333.0 444.0
+winLeafImposts ::: LEAF_IMPOST_NONE LEAF_IMPOST_HOR_1 LEAF_IMPOST_NONE LEAF_IMPOST_HOR_2
+winIsSandwiches ::: false false false :: false true false :: true false false :: false true false
+winGlazingBars ::: 0x0 0x0 0x0 :: 0x0 3x4 0x0 :: 1x2 0x0 0x0 :: 0x0 0x0 0x0

@@ -1,0 +1,31 @@
+winPin ::: 
+winCode ::: block_Qo
+winDimentionsArray :::  1700 2200 800 1300
+winOpeningsArray :::  OPEN_RIGHT OPEN_TOP_LEFT
+winIsDoorArray :::  true false
+winMosquitoNetArray :::  false true
+winDescription ::: 
+winAmount ::: 
+winAutor ::: 
+winSystem ::: ПВХ система С
+winGlass ::: zvychajne 4-6-4
+winInnerSill ::: bilyj 300
+winOuterSill ::: vidlyv bilyj 200
+winMoskitonet ::: sitka bila
+winFurniture ::: bila typ 1
+winWorks ::: montadg
+winAditions ::: pina montadgna :: komplekt shurupiv
+winAddonSeatProfile ::: true
+winAddonDorsill ::: false
+winAddonCornerJamb ::: false
+winAddonJointProfile ::: false :: false :: false :: false
+winAddonGapProfile ::: false :: false :: false :: false
+winAddonExtender20 ::: false :: false :: false :: false
+winAddonExtender40 ::: false :: false :: false :: false
+winAddonExtender60 ::: false :: false :: false :: false
+winAddonExtender80 ::: false :: false :: false :: false
+winAddonExtender100 ::: false :: false :: false :: false
+winLeafsIimpostsDimentions ::: 900 0 ::0 0
+winLeafImposts ::: LEAF_IMPOST_HOR_1 LEAF_IMPOST_NONE
+winIsDoorSill ::: false false
+winIsSandwiches ::: false true true ::false false false

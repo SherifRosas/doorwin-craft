@@ -1,4 +1,5 @@
 "use client";
+import React from 'react';
 import type { DesignConfig } from '@/src/app/draw/page';
 
 interface AndroidControlPanelProps {
@@ -14,6 +15,13 @@ interface AndroidControlPanelProps {
   onDelete?: () => void;
   onToggleGrid?: () => void;
   onMoreOptions?: () => void;
+}
+
+interface ButtonConfig {
+  icon: string;
+  label: string;
+  action: (() => void) | undefined;
+  customIcon?: React.ReactNode;
 }
 
 export function AndroidControlPanel({
@@ -33,7 +41,7 @@ export function AndroidControlPanel({
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   // Tool buttons matching Android app style
-  const buttons = [
+  const buttons: ButtonConfig[] = [
     // Row 1
     { icon: '☰', label: 'Grid', action: onToggleGrid },
     { icon: '│', label: 'Vertical Line', action: onAddVerticalMullion },
@@ -41,9 +49,6 @@ export function AndroidControlPanel({
     { icon: '↑', label: 'Move Up', action: onMoveUp },
     { icon: '←', label: 'Move Left', action: onMoveLeft },
     { icon: '⇅', label: 'Resize Vertical', action: onResizeVertical },
-    { icon: '☰', label: 'Menu', action: onMoreOptions },
-    { icon: '☐', label: 'Select', action: () => {} },
-    { icon: '◐', label: 'Options', action: onMoreOptions },
     // Row 2
     { icon: '☰', label: 'Menu', action: onMoreOptions },
     { icon: '││', label: 'Double Vertical', action: onAddVerticalMullion },
@@ -51,7 +56,103 @@ export function AndroidControlPanel({
     { icon: '↓', label: 'Move Down', action: onMoveDown },
     { icon: '→', label: 'Move Right', action: onMoveRight },
     { icon: '⇄', label: 'Resize Horizontal', action: onResizeHorizontal },
-    { icon: '☐', label: 'Select', action: () => {} },
+    // Row 3 - Square icons with diagonal lines
+    { 
+      icon: 'square-diag-1', 
+      label: 'Square Diagonal 1', 
+      action: () => {},
+      customIcon: (
+        <div style={{
+          width: '20px',
+          height: '20px',
+          border: '2px solid #2c3e50',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            width: '100%',
+            height: '2px',
+            background: '#2c3e50',
+            transform: 'rotate(45deg)',
+            position: 'absolute'
+          }} />
+        </div>
+      )
+    },
+    { 
+      icon: 'square-diag-2', 
+      label: 'Square Diagonal 2', 
+      action: () => {},
+      customIcon: (
+        <div style={{
+          width: '20px',
+          height: '20px',
+          border: '2px solid #2c3e50',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            width: '100%',
+            height: '2px',
+            background: '#2c3e50',
+            transform: 'rotate(-45deg)',
+            position: 'absolute'
+          }} />
+        </div>
+      )
+    },
+    { 
+      icon: 'square-diag-3', 
+      label: 'Square Diagonal 3', 
+      action: () => {},
+      customIcon: (
+        <div style={{
+          width: '20px',
+          height: '20px',
+          border: '2px solid #2c3e50',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            width: '100%',
+            height: '2px',
+            background: '#2c3e50',
+            transform: 'rotate(135deg)',
+            position: 'absolute'
+          }} />
+        </div>
+      )
+    },
+    { 
+      icon: 'square-diag-4', 
+      label: 'Square Diagonal -135°', 
+      action: () => {},
+      customIcon: (
+        <div style={{
+          width: '20px',
+          height: '20px',
+          border: '2px solid #2c3e50',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <div style={{
+            width: '100%',
+            height: '2px',
+            background: '#2c3e50',
+            transform: 'rotate(-135deg)',
+            position: 'absolute'
+          }} />
+        </div>
+      )
+    },
     { icon: '⌫', label: 'Delete', action: onDelete },
     { icon: '☷', label: 'More', action: onMoreOptions },
   ];
@@ -65,7 +166,7 @@ export function AndroidControlPanel({
     }}>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(9, 1fr)',
+        gridTemplateColumns: 'repeat(6, 1fr)',
         gap: isMobile ? '4px' : '6px',
         maxWidth: '100%',
         overflowX: 'auto'
@@ -104,11 +205,13 @@ export function AndroidControlPanel({
             }}
             title={btn.label}
           >
-            {btn.icon}
+            {btn.customIcon || btn.icon}
           </button>
         ))}
       </div>
     </div>
   );
 }
+
+
 

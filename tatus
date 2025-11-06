@@ -1,0 +1,3 @@
+[33m0b05c68[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Update footer: AI Developer title, phone +201065661882, clickable icons
+[33mcda2270[m Add title heading for Sherif Rosas in footer
+[33m65d604e[m Fix dashboard: initialize user state with guest to prevent 'Please log in' message

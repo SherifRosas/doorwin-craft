@@ -1,26 +1,197 @@
+/* Loading spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Splash Screen Animations */
+@keyframes splashPulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes logoFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes splashFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes splashDot1 {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  33% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  66%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+
+@keyframes splashDot2 {
+  0%, 33% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  83%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+
+@keyframes splashDot3 {
+  0%, 66% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  83% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+}
+
 html, body { 
   margin: 0; 
   padding: 0; 
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* iOS Safari fixes */
+  /* Universal mobile fixes - All iOS & Android versions */
   height: 100%;
-  height: -webkit-fill-available;
+  height: -webkit-fill-available; /* iOS Safari */
   overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  /* Prevent pull-to-refresh on iOS */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling iOS */
+  overflow-scrolling: touch; /* Smooth scrolling Android */
+  /* Prevent pull-to-refresh on all mobile browsers */
   overscroll-behavior-y: none;
+  overscroll-behavior-x: none;
+  /* Touch optimization */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  /* Prevent text selection issues on mobile */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-/* Fix iOS viewport height issue */
+/* Allow text selection in content areas */
+input, textarea, select, [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Fix iOS viewport height issue - All iOS versions */
 @supports (-webkit-touch-callout: none) {
   body {
     min-height: -webkit-fill-available;
+    min-height: 100vh; /* Fallback */
   }
   
   .full-height {
     min-height: -webkit-fill-available;
+    min-height: 100vh; /* Fallback */
+  }
+}
+
+/* Android viewport fixes - All Android versions */
+.android-device body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+/* Old device optimizations */
+.old-device * {
+  /* Reduce animations for better performance */
+  animation-duration: 0.5s !important;
+  transition-duration: 0.3s !important;
+}
+
+.old-device canvas {
+  /* Optimize canvas rendering for old devices */
+  image-rendering: optimizeSpeed;
+  -webkit-image-rendering: optimizeSpeed;
+}
+
+/* iOS version-specific fixes */
+.ios-12 *,
+.ios-11 *,
+.ios-10 * {
+  /* Disable complex animations on very old iOS */
+  animation: none !important;
+}
+
+.ios-12 canvas,
+.ios-11 canvas,
+.ios-10 canvas {
+  /* Optimize canvas for old iOS */
+  will-change: auto;
+  transform: translateZ(0); /* Force hardware acceleration */
+}
+
+/* Android version-specific fixes */
+.android-4 *,
+.android-5 * {
+  /* Disable complex animations on old Android */
+  animation: none !important;
+}
+
+/* Touch optimization for all mobile devices */
+.mobile-device,
+.tablet-device {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* Better scrolling on all devices */
+.mobile-device *,
+.tablet-device * {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
+
+/* CSS Variables fallback for old browsers */
+.no-css-vars {
+  /* Variables won't work, but we use fallback colors */
+}
+
+/* Performance optimizations for older devices */
+@media (max-width: 768px) {
+  .old-device .scrollable-sidebar {
+    /* Simpler scrolling on old devices */
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 }
 
@@ -35,10 +206,122 @@ input, select, textarea {
   touch-action: manipulation;
 }
 
+/* COMPLETE OVERRIDE - Allow native scrolling */
+.scrollable-sidebar {
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+  overflow-scrolling: touch !important;
+  /* Remove any pointer event blocking */
+  pointer-events: auto !important;
+  /* Force scrolling capability */
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+/* All children can receive touches */
+.scrollable-sidebar > * {
+  pointer-events: auto !important;
+  touch-action: auto !important;
+}
+
+/* But keep manipulation for buttons and inputs */
+.scrollable-sidebar button,
+.scrollable-sidebar input,
+.scrollable-sidebar select,
+.scrollable-sidebar textarea {
+  touch-action: manipulation !important;
+  -webkit-user-select: auto !important;
+  user-select: auto !important;
+}
+
 /* Canvas fixes for iOS */
 canvas {
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
+}
+
+/* Android scrolling fixes */
+.scrollable-sidebar {
+  -webkit-overflow-scrolling: touch !important;
+  overflow-scrolling: touch;
+  /* Force scrolling on Android - ALWAYS show scrollbar */
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  -ms-overflow-style: scroll; /* Always show scrollbar on IE/Edge */
+  /* Ensure it can scroll */
+  min-height: 0 !important;
+  max-height: 100vh !important;
+  /* Override global touch-action to allow scrolling */
+  touch-action: pan-y !important;
+  /* Enable momentum scrolling */
+  -webkit-overflow-scrolling: touch !important;
+  /* Force hardware acceleration */
+  -webkit-transform: translateZ(0) !important;
+  transform: translateZ(0) !important;
+  /* Force scrollbar to always be visible */
+  scrollbar-gutter: stable;
+}
+
+/* Always show scrollbar - visible on all devices */
+.scrollable-sidebar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.05); /* Firefox */
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+.scrollable-sidebar::-webkit-scrollbar {
+  width: 8px !important;
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(0, 0, 0, 0.05) !important;
+  display: block !important;
+}
+
+.scrollable-sidebar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-radius: 4px;
+}
+
+.scrollable-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-radius: 4px;
+  min-height: 40px;
+}
+
+.scrollable-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+.scrollable-sidebar::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Android touch scrolling improvements - FORCE SCROLLING */
+@media (hover: none) and (pointer: coarse) {
+  .scrollable-sidebar {
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    overscroll-behavior-y: contain !important;
+    scrollbar-width: thin;
+    overflow-y: scroll !important;
+    height: calc(100vh - 92px) !important;
+    max-height: calc(100vh - 92px) !important;
+    position: fixed !important;
+    top: 92px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    box-sizing: border-box !important;
+    /* Remove any interference */
+    pointer-events: auto !important;
+  }
+  
+  /* Inner content wrapper */
+  .scrollable-sidebar > div {
+    min-height: 101% !important; /* Force overflow */
+    pointer-events: auto !important;
+  }
 }
 
 

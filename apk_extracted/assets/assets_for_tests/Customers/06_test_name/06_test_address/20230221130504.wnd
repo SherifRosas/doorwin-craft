@@ -1,0 +1,42 @@
+winFileVersion ::: 3
+winPin ::: 
+winCode ::: wblock{vsx{0.0 777.0 1444.0}vsx vsy{0.0 666.0 1334.0 2222.0}vsy pns{0:0 0:1 1:0 1:1 1:2 1:3 2:2 2:3}pns frs{0:7}frs ops{0:3 1:5 2:6 4:7}ops imps{1:3 2:5 4:6}imps opsfrs{0|1|2|3}opsfrs impsfrs{0|1|2}impsfrs}wblock
+winDimentionsArray :::  
+winOpeningsArray :::  OPEN_FRENCH_LC_RCF OPEN_FRENCH_LCF_RC OPEN_FRENCH_LT_RCF OPEN_FRENCH_LCF_RT
+winIsDoorArray :::  false true false false
+winMosquitoNetArray :::  false true true false
+winDescription ::: win-cost 573915.75 total-cost 5344931.95
+winAmount ::: 1
+winPriceOverride ::: null
+winAutor ::: 
+winFinance ::: 00_1_finance
+winSystem ::: 01_1_win_system
+winGlass ::: 04_1_glass
+winMoskitonet ::: 28_1_mosquito_net
+winFurniture ::: 13_1_furniture
+winLaminationInner ::: 31_1_lamination
+winLaminationOuter ::: 31_1_lamination
+winColors ::: 34_1_alder
+winInnerSill ::: 10_1_inner_sill :: 11_2_inner_sill
+winInnerSill_extra ::: 10_1_inner_sill :: 11_2_inner_sill
+winOuterSill ::: 07_1_outer_sill :: 08_2_outer_sill
+winOuterSill_extra ::: 07_1_outer_sill :: 08_2_outer_sill
+winWorks ::: 22_1_job :: 23_2_job :: 24_3_job :: 25_4_job :: 26_5_job
+winAditions ::: 16_1_extra_material :: 17_2_extra_material :: 18_3_extra_material :: 19_4_extra_material :: 20_5_extra_material
+winAddonSeatProfile ::: false
+winAddonDorsill ::: true
+winAddonCornerJamb ::: true
+winAddonJointProfile ::: false true true true
+winAddonJointProfile90deg ::: true false true true
+winAddonJointProfile135deg ::: true true false true
+winAddonGapProfile ::: true true true false
+winAddonExtender15 ::: false true true true
+winAddonExtender20 ::: true false true true
+winAddonExtender40 ::: true true false true
+winAddonExtender60 ::: true true true false
+winAddonExtender80 ::: true true false true
+winAddonExtender100 ::: true false true true
+winLeafsIimpostsDimentions ::: 0.0 0.0 :: 0.0 0.0 :: 0.0 0.0 :: 0.0 0.0
+winLeafImposts ::: LEAF_IMPOST_NONE LEAF_IMPOST_NONE LEAF_IMPOST_NONE LEAF_IMPOST_NONE
+winIsSandwiches ::: false false false :: false false false :: false false false :: false false false
+winGlazingBars ::: 1x2 0x0 0x0 :: 0x0 0x0 0x0 :: 0x0 0x0 0x0 :: 3x0 0x0 0x0

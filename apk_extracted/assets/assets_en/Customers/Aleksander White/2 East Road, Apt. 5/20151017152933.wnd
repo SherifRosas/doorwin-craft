@@ -1,0 +1,26 @@
+winPin ::: 
+winCode ::: werAB_Bab
+winDimentionsArray :::  1500 1500 750 500
+winOpeningsArray :::  OPEN_RIGHT OPEN_LEFT OPEN_NONE
+winMosquitoNetArray :::  false true false
+winDescription ::: 
+winAmount ::: 
+winAutor ::: 
+winSystem ::: PVC system A
+winGlass ::: common glass 4-6-4
+winInnerSill ::: inner sill white 300
+winOuterSill ::: outer sill white 200
+winMoskitonet ::: mosq. net white
+winFurniture ::: white type 1
+winWorks ::: instalation
+winAditions ::: set of screws :: mounting foam
+winAddonSeatProfile ::: true
+winAddonDorsill ::: false
+winAddonCornerJamb ::: false
+winAddonJointProfile ::: false :: false :: false :: false
+winAddonGapProfile ::: false :: false :: false :: false
+winAddonExtender20 ::: false :: false :: false :: false
+winAddonExtender40 ::: false :: false :: false :: false
+winAddonExtender60 ::: false :: false :: false :: false
+winAddonExtender80 ::: false :: false :: false :: false
+winAddonExtender100 ::: false :: false :: false :: false

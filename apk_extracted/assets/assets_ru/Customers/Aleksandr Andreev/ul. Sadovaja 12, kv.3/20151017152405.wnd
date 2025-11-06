@@ -1,0 +1,27 @@
+winPin ::: 
+winCode ::: werABC
+winDimentionsArray :::  2400 1700 800 1600
+winOpeningsArray :::  OPEN_TOP_RIGHT OPEN_NONE OPEN_LEFT
+winMosquitoNetArray :::  true false true
+winDescription ::: 
+winAmount ::: 
+winAutor ::: 
+winSystem ::: ПВХ система В
+winColors ::: вишня
+winGlass ::: prostoe 4-6-4
+winInnerSill ::: belyj 300
+winOuterSill ::: otliv belyj 200
+winMoskitonet ::: setka belaja
+winFurniture ::: belaja tip 1
+winWorks ::: montadg
+winAditions ::: pena montadgnaja :: komplekt shurupov
+winAddonSeatProfile ::: true
+winAddonDorsill ::: false
+winAddonCornerJamb ::: false
+winAddonJointProfile ::: false :: false :: false :: false
+winAddonGapProfile ::: false :: false :: false :: false
+winAddonExtender20 ::: false :: false :: false :: false
+winAddonExtender40 ::: false :: false :: false :: false
+winAddonExtender60 ::: false :: false :: false :: false
+winAddonExtender80 ::: false :: false :: false :: false
+winAddonExtender100 ::: false :: false :: false :: false
